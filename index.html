@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="黒字なのに現金が足りない、を先に知る。中小企業向け経営管理ツールSAIFAR。無料の資金繰りテンプレ配布中。">
+<meta property="og:title" content="SAIFAR｜黒字なのに現金が足りない、を先に知る">
+<meta property="og:description" content="資金がショートしそうな月が&quot;先に&quot;わかる。無料の資金繰りExcelテンプレを配布中。">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<title>SAIFAR｜黒字なのに現金が足りない、を先に知る</title>
+<style>
+  :root {
+    --navy:#1B2A4A; --navy2:#2E4372; --ink:#16233F;
+    --amber:#D8971A; --amber-soft:#F4C74B; --amber-wash:#FBF1D6;
+    --danger:#C4463A; --danger-wash:#F7E2DE;
+    --paper:#F4F6FB; --card:#FFFFFF; --line:#E4E9F2;
+    --muted:#5A6a86;
+    --shadow:0 1px 2px rgba(22,35,63,.05), 0 24px 60px -32px rgba(22,35,63,.30);
+    --maxw:1080px;
+    --f-jp:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,sans-serif;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --navy:#EAF0FB; --navy2:#C6D3EC; --ink:#EAF0FB;
+      --amber:#F4C74B; --amber-soft:#E3A92C; --amber-wash:#2A2718;
+      --danger:#E7695B; --danger-wash:#2E1C1A;
+      --paper:#0E1626; --card:#16203A; --line:#26324C;
+      --muted:#9AA8C4;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 24px 60px -30px rgba(0,0,0,.6);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="light"] {
+    --navy:#1B2A4A; --navy2:#2E4372; --ink:#16233F;
+    --amber:#D8971A; --amber-soft:#F4C74B; --amber-wash:#FBF1D6;
+    --danger:#C4463A; --danger-wash:#F7E2DE;
+    --paper:#F4F6FB; --card:#FFFFFF; --line:#E4E9F2; --muted:#5A6a86;
+    --shadow:0 1px 2px rgba(22,35,63,.05), 0 24px 60px -32px rgba(22,35,63,.30);
+    color-scheme:light;
+  }
+  :root[data-theme="dark"] {
+    --navy:#EAF0FB; --navy2:#C6D3EC; --ink:#EAF0FB;
+    --amber:#F4C74B; --amber-soft:#E3A92C; --amber-wash:#2A2718;
+    --danger:#E7695B; --danger-wash:#2E1C1A;
+    --paper:#0E1626; --card:#16203A; --line:#26324C; --muted:#9AA8C4;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 24px 60px -30px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+
+  * { box-sizing:border-box; }
+  body { margin:0; }
+  .page {
+    font-family:var(--f-jp); color:var(--ink); background:var(--paper);
+    line-height:1.85; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(120% 80% at 85% -10%, var(--amber-wash), transparent 55%);
+  }
+  .wrap { max-width:var(--maxw); margin:0 auto; padding:0 24px; }
+  a { color:inherit; }
+  h1,h2,h3,p { margin:0; }
+  .mk {
+    background:linear-gradient(180deg, transparent 62%, var(--amber-soft) 62% 92%, transparent 92%);
+    padding:0 .06em; font-weight:900;
+  }
+
+  /* --- top bar --- */
+  .top { display:flex; align-items:center; justify-content:space-between; padding:20px 0; }
+  .brand { display:flex; align-items:baseline; gap:10px; }
+  .brand .logo { font-weight:900; letter-spacing:.22em; font-size:19px; color:var(--navy); }
+  .brand .by { font-size:11px; color:var(--muted); font-weight:700; letter-spacing:.02em; }
+  .top .status { font-size:11.5px; font-weight:800; color:var(--amber); border:1px solid var(--amber);
+    padding:4px 11px; border-radius:999px; letter-spacing:.04em; }
+
+  /* --- hero --- */
+  .hero { display:grid; grid-template-columns:1.02fr .98fr; gap:44px; align-items:center;
+    padding:26px 0 54px; }
+  .eyebrow { font-size:12.5px; font-weight:800; letter-spacing:.08em; color:var(--navy2); margin-bottom:18px; }
+  .hero h1 { font-size:clamp(30px,4.6vw,52px); font-weight:900; line-height:1.28; letter-spacing:.01em;
+    text-wrap:balance; color:var(--navy); }
+  .hero h1 .dim { color:var(--muted); font-weight:800; }
+  .lead { margin-top:20px; font-size:16.5px; color:var(--ink); max-width:34em; }
+  .lead b { font-weight:800; }
+
+  .ctacard { margin-top:26px; background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:20px 20px 18px; box-shadow:var(--shadow); max-width:430px; }
+  .ctacard .give { font-size:13.5px; font-weight:800; color:var(--navy); display:flex; align-items:center; gap:8px; }
+  .ctacard .give .tag { font-size:10.5px; font-weight:900; color:#fff; background:var(--amber);
+    padding:2px 8px; border-radius:6px; letter-spacing:.03em; }
+  .ctacard .sub { font-size:12.5px; color:var(--muted); margin-top:6px; }
+  .btn { display:block; text-align:center; text-decoration:none; margin-top:14px;
+    background:var(--navy); color:var(--paper); font-weight:900; font-size:16px; letter-spacing:.02em;
+    padding:15px 18px; border-radius:12px; transition:transform .12s ease, box-shadow .2s ease;
+    box-shadow:0 10px 24px -12px rgba(27,42,74,.65); }
+  .btn:hover { transform:translateY(-2px); box-shadow:0 16px 30px -12px rgba(27,42,74,.75); }
+  .btn:focus-visible { outline:3px solid var(--amber); outline-offset:2px; }
+  .btn .small { display:block; font-size:11.5px; font-weight:700; opacity:.82; letter-spacing:.02em; margin-top:2px; }
+  .reassure { margin-top:11px; font-size:11.5px; color:var(--muted); text-align:center; }
+
+  /* --- hero chart --- */
+  .viz { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:18px 18px 14px;
+    box-shadow:var(--shadow); }
+  .viz .vh { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:6px; }
+  .viz .vh .t { font-size:13px; font-weight:900; color:var(--navy); }
+  .viz .vh .u { font-size:11px; font-weight:700; color:var(--muted); }
+  .viz svg { display:block; width:100%; height:auto; }
+  .viz .cap { margin-top:8px; font-size:11.5px; color:var(--muted); font-weight:700; text-align:center; }
+  .viz .cap b { color:var(--danger); }
+
+  /* --- section scaffolding --- */
+  section { padding:52px 0; }
+  .sec-label { font-size:12px; font-weight:900; letter-spacing:.14em; color:var(--amber); margin-bottom:14px; }
+  h2.st { font-size:clamp(23px,3vw,33px); font-weight:900; color:var(--navy); line-height:1.4; text-wrap:balance; }
+  .sd { margin-top:12px; font-size:15.5px; color:var(--muted); max-width:40em; line-height:1.8; }
+
+  /* pains */
+  .pains { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:30px; }
+  .pain { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 20px; box-shadow:var(--shadow); }
+  .pain .q { font-size:26px; font-weight:900; color:var(--amber); font-family:Georgia,serif; line-height:1; }
+  .pain p { margin-top:10px; font-size:14.5px; color:var(--ink); font-weight:600; line-height:1.7; }
+
+  /* offer band */
+  .offer { background:var(--navy); border-radius:24px; padding:40px; display:grid;
+    grid-template-columns:1.1fr .9fr; gap:34px; align-items:center; }
+  .offer, .offer * { --ink:var(--paper); }
+  .offer .sec-label { color:var(--amber-soft); }
+  .offer h2 { font-size:clamp(22px,2.8vw,30px); font-weight:900; color:var(--paper); line-height:1.4; }
+  .offer .ol { margin-top:16px; display:flex; flex-direction:column; gap:11px; }
+  .offer .oli { display:flex; gap:11px; align-items:flex-start; font-size:14.5px; color:#DCE6F7; }
+  .offer .oli .ck { flex:none; width:20px; height:20px; border-radius:6px; background:var(--amber); color:var(--navy);
+    display:grid; place-items:center; font-weight:900; font-size:12px; margin-top:2px; }
+  .offer .btn { background:var(--amber); color:#1B2A4A; box-shadow:0 12px 26px -12px rgba(216,151,26,.7); }
+  .offer .btn:hover { box-shadow:0 18px 34px -12px rgba(216,151,26,.8); }
+  .offer .reassure { color:#9FB2D4; }
+
+  /* template preview mock */
+  .mock { background:var(--card); border-radius:14px; overflow:hidden; box-shadow:0 20px 50px -20px rgba(0,0,0,.5);
+    border:1px solid rgba(255,255,255,.14); }
+  .mock .mh { background:var(--paper); padding:9px 14px; font-size:11px; font-weight:900; color:var(--navy);
+    border-bottom:1px solid var(--line); letter-spacing:.02em; }
+  .mrow { display:grid; grid-template-columns:1fr 68px 74px; gap:8px; padding:8px 14px; font-size:12px;
+    border-bottom:1px solid var(--line); color:var(--ink); font-variant-numeric:tabular-nums; }
+  .mrow.h { background:var(--paper); font-weight:800; color:var(--muted); font-size:10.5px; }
+  .mrow .r { text-align:right; }
+  .mrow .neg { color:var(--danger); font-weight:900; }
+  .mrow .pos { color:var(--navy2); font-weight:800; }
+
+  /* coming: saifar */
+  .coming .grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-top:26px; }
+  .feat { background:var(--card); border:1px solid var(--line); border-radius:13px; padding:18px 15px; box-shadow:var(--shadow); }
+  .feat .fn { font-size:14.5px; font-weight:900; color:var(--navy); }
+  .feat .fd { margin-top:7px; font-size:12.5px; color:var(--muted); line-height:1.6; }
+  .coming .note { margin-top:20px; font-size:13px; color:var(--muted); }
+
+  /* trust */
+  .trust { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:34px 36px; box-shadow:var(--shadow);
+    display:grid; grid-template-columns:auto 1fr; gap:26px; align-items:center; }
+  .trust .badge { width:82px; height:82px; border-radius:20px; background:var(--amber-wash); color:var(--amber);
+    display:grid; place-items:center; font-weight:900; font-size:15px; letter-spacing:.14em; border:1px solid var(--line);
+    text-align:center; line-height:1.3; }
+  .trust p { font-size:15px; color:var(--ink); }
+  .trust p + p { margin-top:10px; }
+  .trust .who { font-size:13px; color:var(--muted); font-weight:700; }
+
+  /* final */
+  .final { text-align:center; padding:64px 0 56px; }
+  .final h2 { font-size:clamp(24px,3.2vw,36px); font-weight:900; color:var(--navy); line-height:1.36; text-wrap:balance; }
+  .final .sd { margin:14px auto 0; text-align:center; }
+  .final .btn { display:inline-block; margin-top:26px; padding:16px 40px; }
+
+  /* footer */
+  footer { border-top:1px solid var(--line); padding:30px 0 44px; }
+  footer .discl { font-size:11.5px; color:var(--muted); line-height:1.7; max-width:56em; }
+  footer .meta { margin-top:14px; font-size:11.5px; color:var(--muted); display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+  footer .meta .lg { font-weight:900; letter-spacing:.2em; color:var(--navy); }
+
+  @media (max-width:860px) {
+    .hero { grid-template-columns:1fr; gap:30px; }
+    .pains { grid-template-columns:1fr; }
+    .offer { grid-template-columns:1fr; padding:30px; }
+    .coming .grid { grid-template-columns:1fr 1fr; }
+    .trust { grid-template-columns:1fr; text-align:left; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .draw { stroke-dasharray:1400; stroke-dashoffset:1400; animation:draw 1.9s cubic-bezier(.4,.5,.2,1) .25s forwards; }
+    .fade { opacity:0; animation:fade .7s ease forwards; }
+    .d1{animation-delay:1.5s} .d2{animation-delay:1.75s}
+  }
+  @keyframes draw { to { stroke-dashoffset:0; } }
+  @keyframes fade { to { opacity:1; } }
+</style>
+</head>
+<body>
+
+
+<div class="page">
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <span class="logo">SAIFAR</span>
+        <span class="by">by 株式会社アベンジャーズ</span>
+      </div>
+      <span class="status">開発中・事前登録受付</span>
+    </div>
+
+    <!-- HERO -->
+    <header class="hero">
+      <div>
+        <div class="eyebrow">中小企業の経営者・経理のための、お金の見張り番</div>
+        <h1>黒字なのに、現金が足りない。<br><span class="mk">その"まさか"を、先に</span>知る。</h1>
+        <p class="lead">帳簿は黒字。なのに、月末になると口座が減っていく——。<br>
+          <b>数字が苦手でも、資金がショートしそうな月が"先に"わかる</b>。それが、いま開発している経営管理ツール〈SAIFAR〉です。</p>
+
+        <div class="ctacard">
+          <div class="give"><span class="tag">無料</span>資金繰りが一目でわかる Excelテンプレ</div>
+          <div class="sub">数字を入れるだけ。危ない月が赤く光ります。事前登録の方へ先行配布中。</div>
+          <a class="btn" href="https://forms.gle/hFgEYMiKVay7iz3y9" target="_blank" rel="noopener">
+            無料テンプレを受け取る
+            <span class="small">＋ 開発中のSAIFARに先行アクセス（30秒）</span>
+          </a>
+          <div class="reassure">メールアドレスだけでOK・費用は一切かかりません</div>
+        </div>
+      </div>
+
+      <!-- thesis viz: cashflow that dips below zero -->
+      <div class="viz">
+        <div class="vh"><span class="t">資金繰りの推移（月末の現金残高）</span><span class="u">単位：万円</span></div>
+        <svg viewBox="0 0 560 320" role="img" aria-label="月末の現金残高が6月にマイナスへ落ち込む折れ線グラフ">
+          <!-- gridlines -->
+          <g stroke="var(--line)" stroke-width="1">
+            <line x1="40" y1="61" x2="540" y2="61"/>
+            <line x1="40" y1="128" x2="540" y2="128"/>
+            <line x1="40" y1="270" x2="540" y2="270"/>
+          </g>
+          <!-- zero baseline -->
+          <line x1="40" y1="194" x2="540" y2="194" stroke="var(--muted)" stroke-width="1.4" stroke-dasharray="5 5"/>
+          <text x="44" y="188" font-size="11" font-weight="700" fill="var(--muted)">0</text>
+          <!-- danger fill (below zero) -->
+          <path class="fade d1" d="M255,194 L267,251 L313,245 L358,238 L404,232 L449,226 L494,220 L540,213 L540,194 Z"
+                fill="var(--danger)" fill-opacity="0.14"/>
+          <!-- main navy line -->
+          <polyline class="draw" fill="none" stroke="var(--navy2)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"
+            points="40,61 85,55 131,49 176,43 222,36 267,251 313,245 358,238 404,232 449,226 494,220 540,213"/>
+          <!-- negative markers -->
+          <g fill="var(--danger)">
+            <circle cx="267" cy="251" r="5.5" class="fade d1"/>
+            <circle cx="313" cy="245" r="4.5" class="fade d1"/>
+            <circle cx="358" cy="238" r="4.5" class="fade d1"/>
+          </g>
+          <!-- last positive peak marker -->
+          <circle cx="222" cy="36" r="5" fill="var(--navy2)" class="fade d1"/>
+          <!-- shortfall flag -->
+          <g class="fade d2">
+            <line x1="267" y1="251" x2="267" y2="286" stroke="var(--danger)" stroke-width="1.2" stroke-dasharray="3 3"/>
+            <rect x="196" y="288" width="150" height="24" rx="6" fill="var(--danger)"/>
+            <text x="271" y="304" font-size="12" font-weight="900" fill="#fff" text-anchor="middle">6月：資金ショート</text>
+          </g>
+          <!-- month axis -->
+          <g font-size="10.5" fill="var(--muted)" text-anchor="middle" font-weight="600">
+            <text x="40" y="20">1月</text><text x="222" y="20">5月</text><text x="540" y="20">12月</text>
+          </g>
+        </svg>
+        <div class="cap">月次の"点"では気づけない。<b>3か月先の危険な月</b>が、先に見える。</div>
+      </div>
+    </header>
+  </div>
+
+  <!-- PAINS -->
+  <section>
+    <div class="wrap">
+      <div class="sec-label">こんな不安、ありませんか</div>
+      <h2 class="st">「うちの会社、来月のお金、大丈夫だろうか」</h2>
+      <div class="pains">
+        <div class="pain"><div class="q">01</div><p>利益は出ているのに、なぜか月末の口座残高が減っていく。理由がはっきり言えない。</p></div>
+        <div class="pain"><div class="q">02</div><p>資金繰り表をExcelで手作りするのが大変で、気づけば数字が古いまま放置になっている。</p></div>
+        <div class="pain"><div class="q">03</div><p>数字が読めず、資金が苦しくなってから慌てる。打ち手がいつも後手に回る。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFER (lead magnet first) -->
+  <section>
+    <div class="wrap">
+      <div class="offer">
+        <div>
+          <div class="sec-label">まず、無料でどうぞ</div>
+          <h2>「資金繰りが一目でわかる<br>無料Excelテンプレ」を先行配布</h2>
+          <div class="ol">
+            <div class="oli"><span class="ck">✓</span><span>毎月の入金・出金を入れるだけ。月末残高とグラフが自動で出ます。</span></div>
+            <div class="oli"><span class="ck">✓</span><span>資金がショートしそうな月が<b style="color:var(--amber-soft)">赤く警告</b>。危険を"先に"つかめます。</span></div>
+            <div class="oli"><span class="ck">✓</span><span>簿記の知識は不要。数字が苦手な社長・経理の方向けに作りました。</span></div>
+          </div>
+          <a class="btn" href="https://forms.gle/hFgEYMiKVay7iz3y9" target="_blank" rel="noopener">無料テンプレを受け取る</a>
+          <div class="reassure">事前登録の方へ、SAIFARリリース時の優先案内もお送りします</div>
+        </div>
+        <div class="mock" aria-hidden="true">
+          <div class="mh">資金繰り表（月末の現金残高）</div>
+          <div class="mrow h"><span>項目</span><span class="r">5月</span><span class="r">6月</span></div>
+          <div class="mrow"><span>収入合計</span><span class="r">350</span><span class="r">300</span></div>
+          <div class="mrow"><span>支出合計</span><span class="r">330</span><span class="r">640</span></div>
+          <div class="mrow"><span>月末の現金残高</span><span class="r pos">250</span><span class="r neg">-90</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMING: SAIFAR -->
+  <section class="coming">
+    <div class="wrap">
+      <div class="sec-label">この先、SAIFARが目指すこと</div>
+      <h2 class="st">中小企業の"お金まわり"を、ひとつの画面で。</h2>
+      <p class="sd">テンプレでつかんだ「見える化」を、数字を入れるだけで自動化するのがSAIFAR。2026年下半期リリース予定です。</p>
+      <div class="grid">
+        <div class="feat"><div class="fn">経営管理</div><div class="fd">月次・予実・資金繰りを1画面で。</div></div>
+        <div class="feat"><div class="fn">補助金検索</div><div class="fd">自社に合いそうな制度に気づく。</div></div>
+        <div class="feat"><div class="fn">資金調達AI</div><div class="fd">融資資料の下書き・返済シミュ。</div></div>
+        <div class="feat"><div class="fn">財務レポート</div><div class="fd">数字を"伝わる形"に。</div></div>
+        <div class="feat"><div class="fn">業種別AI</div><div class="fd">業種ごとの科目・KPIに対応。</div></div>
+      </div>
+      <p class="note">※ 機能は開発中で、内容は変更になる場合があります。まずは無料テンプレから、SAIFARの考え方を試せます。</p>
+    </div>
+  </section>
+
+  <!-- TRUST (honest, build in public) -->
+  <section>
+    <div class="wrap">
+      <div class="trust">
+        <div class="badge">経理代行<br>×AI</div>
+        <div>
+          <p>作っているのは、沖縄の経理代行の会社です。現場で「黒字なのに資金が尽きる」中小企業を何度も見てきました。<b>その"手遅れ"を減らしたい</b>——それがSAIFARを開発している理由です。</p>
+          <p class="who">株式会社アベンジャーズ CEO 宮國｜経理代行・経営管理SaaS｜沖縄</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final">
+    <div class="wrap">
+      <h2>「まさか」の前に、動けるように。</h2>
+      <p class="sd">まずは無料の資金繰りテンプレから。あなたの会社の"危ない月"を、今日、先に見つけましょう。</p>
+      <a class="btn" href="https://forms.gle/hFgEYMiKVay7iz3y9" target="_blank" rel="noopener">無料テンプレを受け取る（30秒）</a>
+      <div class="reassure">メールアドレスだけ・費用は一切かかりません</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p class="discl">本ツールおよびテンプレートは、経営管理・資金繰りの見える化を目的とした一般的な情報提供のためのものであり、税務相談・税務判断を行うものではありません。個別の税務・会計・融資の判断は、顧問税理士等の専門家にご確認ください。作成者は税理士ではありません。記載の機能・時期は開発中の予定であり、変更となる場合があります。</p>
+      <div class="meta"><span class="lg">SAIFAR</span><span>© 株式会社アベンジャーズ</span><span>沖縄</span><span>avengerz-japan.com</span></div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  (function(){
+    try{
+      var y=document.querySelectorAll('[data-year]');
+      for(var i=0;i<y.length;i++){ y[i].textContent=new Date().getFullYear(); }
+    }catch(e){}
+  })();
+</script>
+
+</body>
+</html>
