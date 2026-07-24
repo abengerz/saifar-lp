@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAIFAR｜経営管理 デモ</title>
+<style>
+  :root{
+    --paper:#F4F6FB; --bg2:#EAF1FB; --card:#FFFFFF; --ink:#1B2A4A; --navy:#1B2A4A;
+    --navy2:#2E4372; --line:#E4E9F2; --muted:#5A6A86; --accent:#2563A8; --accent-d:#1D4F87;
+    --accent-l:#EAF1FB; --amber:#D8971A; --amber-soft:#F4C74B; --good:#1A7F4B;
+    --warn:#B4540A; --danger:#C4463A;
+    --sig-r:#f0625c; --sig-y:#f7c14b; --sig-g:#4bc26b;
+    --ease:cubic-bezier(.22,.61,.36,1);
+    --jp:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Noto Sans JP",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  .saifar-wrap{
+    min-height:100%;
+    font-family:var(--jp);
+    color:var(--ink);
+    background:
+      radial-gradient(1100px 620px at 50% -8%, #FFFFFF 0%, var(--paper) 46%, var(--bg2) 100%);
+    display:flex; flex-direction:column; align-items:center;
+    padding:34px 18px 46px;
+    font-variant-numeric:tabular-nums;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ===== Browser frame ===== */
+  .frame{
+    width:min(980px,94vw);
+    aspect-ratio:16/9;
+    background:var(--card);
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:0 30px 70px -24px rgba(27,42,74,.34), 0 6px 18px -8px rgba(27,42,74,.18);
+    border:1px solid var(--line);
+    display:flex; flex-direction:column;
+    position:relative;
+  }
+  .topbar{
+    flex:0 0 auto;
+    height:11%;
+    min-height:38px;
+    display:flex; align-items:center; gap:14px;
+    padding:0 18px;
+    background:linear-gradient(#FBFCFE,#F3F6FC);
+    border-bottom:1px solid var(--line);
+  }
+  .dots{display:flex; gap:7px; flex:0 0 auto}
+  .dots i{width:11px; height:11px; border-radius:50%; display:block}
+  .dots i:nth-child(1){background:var(--sig-r)}
+  .dots i:nth-child(2){background:var(--sig-y)}
+  .dots i:nth-child(3){background:var(--sig-g)}
+  .urlpill{
+    flex:1 1 auto;
+    max-width:420px;
+    height:60%;
+    min-height:24px;
+    background:#FFFFFF;
+    border:1px solid var(--line);
+    border-radius:999px;
+    display:flex; align-items:center; gap:8px;
+    padding:0 16px;
+    color:var(--muted);
+    font-size:clamp(11px,1.35vw,13px);
+    letter-spacing:.01em;
+    overflow:hidden; white-space:nowrap;
+  }
+  .urlpill .lock{width:11px;height:11px;flex:0 0 auto}
+  .urlpill .u-strong{color:var(--navy);font-weight:600}
+  .wordmark{
+    flex:0 0 auto;
+    color:var(--navy);
+    font-weight:800;
+    letter-spacing:.26em;
+    font-size:clamp(12px,1.5vw,15px);
+    padding-right:2px;
+  }
+
+  /* ===== Stage / scenes ===== */
+  .stage{position:relative; flex:1 1 auto; overflow:hidden; background:
+      radial-gradient(720px 420px at 82% -20%, #FFFFFF 0%, transparent 60%),
+      var(--card);}
+  .scene{
+    position:absolute; inset:0;
+    padding:clamp(14px,2.6vw,26px) clamp(16px,3vw,30px);
+    opacity:0; visibility:hidden;
+    transition:opacity .7s var(--ease), visibility .7s;
+    display:flex; flex-direction:column;
+  }
+  .scene.on{opacity:1; visibility:visible}
+  .scene-head{display:flex; align-items:baseline; gap:12px; margin-bottom:clamp(10px,1.8vw,18px); flex-wrap:wrap}
+  .scene-title{font-size:clamp(15px,2vw,20px); font-weight:800; color:var(--navy); letter-spacing:.01em}
+  .scene-sub{font-size:clamp(10px,1.3vw,12.5px); color:var(--muted)}
+
+  /* stagger */
+  .st{opacity:0; transform:translateY(12px)}
+  .scene.on .st{animation:rise .62s var(--ease) forwards}
+  @keyframes rise{to{opacity:1; transform:translateY(0)}}
+
+  /* ===== Scene 1: KPI ===== */
+  .kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(10px,1.5vw,16px); flex:1 1 auto; align-content:center}
+  .kpi{
+    background:linear-gradient(#FFFFFF,#FBFCFE);
+    border:1px solid var(--line);
+    border-radius:15px;
+    padding:clamp(12px,1.8vw,18px);
+    display:flex; flex-direction:column; gap:8px;
+    box-shadow:0 10px 22px -18px rgba(27,42,74,.4);
+    position:relative; overflow:hidden;
+  }
+  .kpi::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--accent)}
+  .kpi.amberbar::before{background:var(--amber)}
+  .kpi-label{font-size:clamp(10px,1.25vw,12px); color:var(--muted); font-weight:600; letter-spacing:.02em}
+  .kpi-val{font-size:clamp(19px,3vw,30px); font-weight:800; color:var(--navy); line-height:1; letter-spacing:-.01em}
+  .kpi-val .unit{font-size:.5em; font-weight:700; color:var(--muted); margin-left:3px}
+  .kpi-foot{display:flex; align-items:center; gap:8px; margin-top:auto; flex-wrap:wrap}
+  .badge{
+    display:inline-flex; align-items:center; gap:3px;
+    font-size:clamp(10px,1.2vw,12px); font-weight:800;
+    padding:3px 8px; border-radius:999px; line-height:1;
+  }
+  .badge.up{background:rgba(26,127,75,.12); color:var(--good)}
+  .badge.down{background:rgba(196,70,58,.12); color:var(--danger)}
+  .badge .arw{font-size:.85em}
+  .kpi-note{font-size:clamp(9px,1.15vw,11px); color:var(--muted)}
+
+  /* ===== Scene 2: 予実 ===== */
+  .bars{display:flex; flex-direction:column; gap:clamp(14px,2.4vw,24px); flex:1 1 auto; justify-content:center; padding:0 2px}
+  .barrow{display:grid; grid-template-columns:74px 1fr 58px; align-items:center; gap:clamp(10px,1.6vw,16px)}
+  .barrow .rlabel{font-size:clamp(12px,1.5vw,14px); font-weight:700; color:var(--navy)}
+  .track{position:relative; height:clamp(20px,3vw,28px); background:var(--accent-l); border-radius:8px; overflow:hidden}
+  .plan{position:absolute; top:0; bottom:0; left:0; border-right:2px dashed var(--navy2); opacity:.5}
+  .fill{position:absolute; top:0; bottom:0; left:0; width:0; border-radius:8px 0 0 8px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-d)); transition:width 1.05s var(--ease)}
+  .fill.over{background:linear-gradient(90deg,var(--amber-soft),var(--amber))}
+  .barrow .rate{font-size:clamp(13px,1.7vw,16px); font-weight:800; text-align:right; color:var(--good)}
+  .barrow .rate.over{color:var(--warn)}
+  .barrow .amt{grid-column:2; font-size:clamp(9.5px,1.15vw,11px); color:var(--muted); margin-top:5px; letter-spacing:.01em}
+  .legend{display:flex; gap:16px; font-size:clamp(9.5px,1.2vw,11.5px); color:var(--muted); margin-top:4px; padding-left:2px; flex-wrap:wrap}
+  .legend span{display:inline-flex; align-items:center; gap:5px}
+  .legend .sw{width:16px; height:9px; border-radius:3px; display:inline-block}
+  .legend .sw.plan{background:transparent; border-right:2px dashed var(--navy2); width:2px; height:12px; opacity:.6}
+  .legend .sw.act{background:linear-gradient(90deg,var(--accent),var(--accent-d))}
+
+  /* ===== Scene 3: cashflow ===== */
+  .cash{flex:1 1 auto; display:flex; flex-direction:column; min-height:0}
+  .cashsvg{flex:1 1 auto; width:100%; min-height:0}
+  .cash-note{
+    display:inline-flex; align-items:center; gap:7px;
+    align-self:flex-start;
+    background:rgba(196,70,58,.09);
+    color:var(--danger);
+    border:1px solid rgba(196,70,58,.28);
+    border-radius:10px;
+    padding:7px 13px;
+    font-size:clamp(11px,1.4vw,13.5px); font-weight:700;
+    margin-top:6px;
+  }
+  .cash-note .dotmk{width:9px;height:9px;border-radius:50%;background:var(--danger);flex:0 0 auto;display:inline-block}
+
+  /* ===== Caption bar ===== */
+  .capbar{
+    flex:0 0 auto;
+    height:11%;
+    min-height:38px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px;
+    padding:0 18px;
+    background:linear-gradient(#FBFCFE,#F1F5FC);
+    border-top:1px solid var(--line);
+  }
+  .cap-left{display:flex; align-items:center; gap:12px; min-width:0}
+  .cap-text{font-size:clamp(10.5px,1.4vw,13px); color:var(--navy); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    transition:opacity .4s var(--ease)}
+  .prog{display:flex; gap:6px; flex:0 0 auto}
+  .prog i{width:7px; height:7px; border-radius:50%; background:var(--line); transition:all .4s var(--ease)}
+  .prog i.act{background:var(--accent); transform:scale(1.15)}
+  .mini{display:flex; align-items:center; gap:6px; flex:0 0 auto; color:var(--navy); font-weight:800; letter-spacing:.18em; font-size:clamp(9px,1.15vw,11px)}
+  .mini .mk{width:15px; height:15px; border-radius:5px; background:linear-gradient(135deg,var(--accent),var(--navy)); position:relative; flex:0 0 auto}
+  .mini .mk::after{content:""; position:absolute; left:3px; right:3px; bottom:3px; height:2px; background:var(--amber-soft); border-radius:2px; box-shadow:0 -4px 0 rgba(255,255,255,.6)}
+
+  /* ===== Below frame ===== */
+  .below{width:min(980px,94vw); margin-top:clamp(20px,3vw,30px); text-align:center; display:flex; flex-direction:column; align-items:center; gap:12px}
+  .svc-name{font-size:clamp(26px,4.4vw,42px); font-weight:900; color:var(--navy); letter-spacing:.02em; line-height:1}
+  .svc-name b{color:var(--accent)}
+  .tagline{
+    display:inline-block;
+    background:var(--navy);
+    color:#fff;
+    padding:9px 20px;
+    border-radius:999px;
+    font-size:clamp(12px,1.7vw,16px);
+    font-weight:700;
+    letter-spacing:.02em;
+  }
+  .tagline em{color:var(--amber-soft); font-style:normal}
+  .hint{font-size:clamp(10.5px,1.4vw,13px); color:var(--muted); max-width:640px; line-height:1.7}
+  .hint kbd{background:#fff; border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; padding:1px 6px; font-family:var(--jp); font-size:.92em; color:var(--navy); font-weight:700}
+
+  @media (max-width:560px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .barrow{grid-template-columns:58px 1fr 46px; gap:9px}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .scene{transition:none}
+    .st{animation:none !important; opacity:1; transform:none}
+    .cap-text{transition:none}
+    .fill{transition:none}
+    .prog i{transition:none}
+  }
+</style>
+<style id="embed-fit">
+html,body{margin:0!important;padding:0!important;background:transparent!important;height:100%!important;overflow:hidden!important}
+body>div{padding:0!important;background:transparent!important;min-height:0!important;height:100%!important}
+.below{display:none!important}
+.frame{width:100%!important;max-width:none!important;height:100%!important;aspect-ratio:auto!important;border-radius:0!important;box-shadow:none!important;border:0!important;margin:0!important}
+</style>
+</head>
+<body>
+
+
+<div class="saifar-wrap">
+  <div class="frame" role="img" aria-label="SAIFAR 経営管理 デモ画面">
+    <!-- top bar -->
+    <div class="topbar">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="urlpill">
+        <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="#5A6A86" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        <span><span class="u-strong">saifar.app</span> / 経営管理</span>
+      </span>
+      <span class="wordmark">SAIFAR</span>
+    </div>
+
+    <!-- stage -->
+    <div class="stage">
+
+      <!-- ===== Scene 1 ===== -->
+      <section class="scene" id="sc1">
+        <div class="scene-head">
+          <div class="scene-title st" style="animation-delay:.05s">月次ダッシュボード</div>
+          <div class="scene-sub st" style="animation-delay:.15s">2026年6月度 ・ サンプルデータ</div>
+        </div>
+        <div class="kpis">
+          <div class="kpi st" style="animation-delay:.20s">
+            <div class="kpi-label">当月売上</div>
+            <div class="kpi-val"><span class="num" data-to="8240" data-dec="0">0</span><span class="unit">千円</span></div>
+            <div class="kpi-foot"><span class="badge up"><span class="arw">▲</span>6.2%</span><span class="kpi-note">前月比</span></div>
+          </div>
+          <div class="kpi st" style="animation-delay:.30s">
+            <div class="kpi-label">粗利率</div>
+            <div class="kpi-val"><span class="num" data-to="42.0" data-dec="1">0.0</span><span class="unit">%</span></div>
+            <div class="kpi-foot"><span class="badge up"><span class="arw">▲</span>1.2pt</span><span class="kpi-note">前月比</span></div>
+          </div>
+          <div class="kpi st" style="animation-delay:.40s">
+            <div class="kpi-label">営業利益</div>
+            <div class="kpi-val"><span class="num" data-to="1180" data-dec="0">0</span><span class="unit">千円</span></div>
+            <div class="kpi-foot"><span class="kpi-note">利益率 14.3%</span></div>
+          </div>
+          <div class="kpi st amberbar" style="animation-delay:.50s">
+            <div class="kpi-label">現預金残高</div>
+            <div class="kpi-val"><span class="num" data-to="15300" data-dec="0">0</span><span class="unit">千円</span></div>
+            <div class="kpi-foot"><span class="kpi-note">前月末 14,900千円</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Scene 2 ===== -->
+      <section class="scene" id="sc2">
+        <div class="scene-head">
+          <div class="scene-title st" style="animation-delay:.05s">予実管理</div>
+          <div class="scene-sub st" style="animation-delay:.15s">2026年6月度 ・ 予算 vs 実績（サンプル）</div>
+        </div>
+        <div class="bars">
+          <div class="barrow st" style="animation-delay:.25s">
+            <div class="rlabel">売上</div>
+            <div class="track"><span class="plan" data-plan="97"></span><span class="fill" data-w="100" data-delay="300"></span></div>
+            <div class="rate">103%</div>
+            <div class="amt">予算 8,000千円 ／ 実績 8,240千円</div>
+          </div>
+          <div class="barrow st" style="animation-delay:.35s">
+            <div class="rlabel">粗利</div>
+            <div class="track"><span class="plan" data-plan="95"></span><span class="fill" data-w="100" data-delay="440"></span></div>
+            <div class="rate">105%</div>
+            <div class="amt">予算 3,300千円 ／ 実績 3,460千円</div>
+          </div>
+          <div class="barrow st" style="animation-delay:.45s">
+            <div class="rlabel">経費</div>
+            <div class="track"><span class="plan" data-plan="96.5"></span><span class="fill over" data-w="100" data-delay="580"></span></div>
+            <div class="rate over">104%</div>
+            <div class="amt">予算 6,900千円 ／ 実績 7,150千円 ・ やや超過</div>
+          </div>
+          <div class="legend st" style="animation-delay:.6s">
+            <span><i class="sw plan"></i>予算ライン</span>
+            <span><i class="sw act"></i>実績</span>
+            <span style="color:var(--warn)"><i class="sw" style="background:linear-gradient(90deg,var(--amber-soft),var(--amber))"></i>予算超過</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Scene 3 ===== -->
+      <section class="scene" id="sc3">
+        <div class="scene-head">
+          <div class="scene-title st" style="animation-delay:.05s">資金繰り（先読み）</div>
+          <div class="scene-sub st" style="animation-delay:.15s">今後12ヶ月の月末現預金の見通し（サンプル）</div>
+        </div>
+        <div class="cash">
+          <svg class="cashsvg st" style="animation-delay:.25s" viewBox="0 0 920 340" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <linearGradient id="cfArea" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2563A8" stop-opacity=".18"/>
+                <stop offset="1" stop-color="#2563A8" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- grid baseline zero -->
+            <line x1="56" y1="262" x2="892" y2="262" stroke="#C4463A" stroke-width="1.5" stroke-dasharray="6 6" opacity=".85"/>
+            <text x="60" y="256" font-family="sans-serif" font-size="13" fill="#C4463A" font-weight="700">残高ゼロ</text>
+            <!-- y frame -->
+            <line x1="56" y1="24" x2="56" y2="300" stroke="#E4E9F2" stroke-width="1.5"/>
+            <line x1="56" y1="300" x2="892" y2="300" stroke="#E4E9F2" stroke-width="1.5"/>
+            <!-- area + line drawn by JS -->
+            <path id="cfAreaPath" fill="url(#cfArea)" d=""/>
+            <path id="cfLine" fill="none" stroke="#2563A8" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" d="" style="stroke-dasharray:2400;stroke-dashoffset:2400"/>
+            <g id="cfDots"></g>
+            <g id="cfLabels"></g>
+          </svg>
+          <div class="cash-note st" style="animation-delay:.9s"><span class="dotmk"></span>数ヶ月先に資金が手薄になる月を検知</div>
+        </div>
+      </section>
+
+    </div><!-- /stage -->
+
+    <!-- caption bar -->
+    <div class="capbar">
+      <div class="cap-left">
+        <span class="cap-text" id="capText">月次ダッシュボード — 会社の今を1画面で</span>
+        <span class="prog"><i class="act"></i><i></i><i></i></span>
+      </div>
+      <div class="mini"><span class="mk"></span>SAIFAR</div>
+    </div>
+  </div><!-- /frame -->
+
+  <div class="below">
+    <div class="svc-name">経営管理</div>
+    <div class="tagline">経営の数字を、<em>ひとつの画面</em>で。</div>
+    <div class="hint">▶ 自動再生（ループ）。X投稿用は、この枠を画面録画（Mac <kbd>⌘</kbd><kbd>⇧</kbd><kbd>5</kbd>）してください。</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  try{
+    var reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+    var scenes = [document.getElementById("sc1"), document.getElementById("sc2"), document.getElementById("sc3")];
+    var caps = [
+      "月次ダッシュボード — 会社の今を1画面で",
+      "予実管理 — 予算とのギャップを早期に把握",
+      "資金繰り — 数ヶ月先の要注意月を先読み"
+    ];
+    var durations = [7000, 7000, 8500];
+    var capText = document.getElementById("capText");
+    var progDots = document.querySelectorAll(".prog i");
+    var idx = -1;
+    var timer = null;
+
+    // ---- number countup ----
+    function fmt(v, dec){
+      if(dec > 0) return v.toFixed(dec);
+      return Math.round(v).toLocaleString("en-US");
+    }
+    function countUp(el){
+      var to = parseFloat(el.getAttribute("data-to"));
+      var dec = parseInt(el.getAttribute("data-dec"), 10) || 0;
+      if(reduce){ el.textContent = fmt(to, dec); return; }
+      var dur = 1100, start = null;
+      function tick(ts){
+        if(idx !== 0){ el.textContent = fmt(to, dec); return; }
+        if(start === null) start = ts;
+        var p = Math.min((ts - start)/dur, 1);
+        var e = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(to * e, dec);
+        if(p < 1) requestAnimationFrame(tick);
+        else el.textContent = fmt(to, dec);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // ---- scene 2 bars ----
+    function resetBars(){
+      scenes[1].querySelectorAll(".fill").forEach(function(f){
+        f.style.transition = "none";
+        f.style.width = "0";
+      });
+    }
+    function runBars(){
+      var fills = scenes[1].querySelectorAll(".fill");
+      var plans = scenes[1].querySelectorAll(".plan");
+      plans.forEach(function(p){ p.style.width = p.getAttribute("data-plan") + "%"; });
+      fills.forEach(function(f){
+        var w = f.getAttribute("data-w") + "%";
+        var d = parseInt(f.getAttribute("data-delay"), 10) || 0;
+        if(reduce){ f.style.transition = "none"; f.style.width = w; return; }
+        void f.getBoundingClientRect(); // lock in reset width:0
+        setTimeout(function(){
+          if(idx !== 1) return;
+          f.style.transition = ""; // restore stylesheet transition
+          f.style.width = w;
+        }, d);
+      });
+    }
+
+    // ---- scene 3 cashflow ----
+    var cfBuilt = false;
+    // 12 months of month-end cash (千円) — sample; crosses below zero mid-horizon
+    var cash = [15300, 16100, 16800, 15900, 11200, -900, -2100, 400, 3200, 5600, 7400, 9100];
+    var months = ["7月","8月","9月","10月","11月","12月","1月","2月","3月","4月","5月","6月"];
+    var X0=56, X1=892, Y0=24, YZERO=262, plotBottom=300;
+    var maxV=Math.max.apply(null, cash), minV=Math.min.apply(null, cash);
+    var padTop = maxV*0.08;
+    function sx(i){ return X0 + (X1 - X0) * (i/(cash.length-1)); }
+    function sy(v){
+      if(v >= 0){
+        return YZERO - (v/(maxV+padTop)) * (YZERO - Y0);
+      } else {
+        return YZERO + (Math.abs(v)/(Math.abs(minV)+1)) * (plotBottom - YZERO);
+      }
+    }
+    function buildCash(){
+      if(cfBuilt) return;
+      cfBuilt = true;
+      var linePath = "", i;
+      for(i=0;i<cash.length;i++){
+        linePath += (i===0?"M":"L") + sx(i).toFixed(1) + " " + sy(cash[i]).toFixed(1) + " ";
+      }
+      linePath = linePath.trim();
+      var lineEl = document.getElementById("cfLine");
+      lineEl.setAttribute("d", linePath);
+      var areaPath = linePath + " L " + sx(cash.length-1).toFixed(1) + " " + plotBottom + " L " + sx(0).toFixed(1) + " " + plotBottom + " Z";
+      document.getElementById("cfAreaPath").setAttribute("d", areaPath);
+
+      var dotsG = document.getElementById("cfDots");
+      var labG = document.getElementById("cfLabels");
+      var svgns = "http://www.w3.org/2000/svg";
+      for(i=0;i<cash.length;i++){
+        var neg = cash[i] < 0;
+        var c = document.createElementNS(svgns,"circle");
+        c.setAttribute("cx", sx(i).toFixed(1));
+        c.setAttribute("cy", sy(cash[i]).toFixed(1));
+        c.setAttribute("r", neg ? "6" : "4");
+        c.setAttribute("fill", neg ? "#C4463A" : "#2563A8");
+        c.setAttribute("stroke", "#fff");
+        c.setAttribute("stroke-width", "2");
+        dotsG.appendChild(c);
+        var t = document.createElementNS(svgns,"text");
+        t.setAttribute("x", sx(i).toFixed(1));
+        t.setAttribute("y", "318");
+        t.setAttribute("text-anchor","middle");
+        t.setAttribute("font-family","sans-serif");
+        t.setAttribute("font-size","12");
+        t.setAttribute("fill", neg ? "#C4463A" : "#5A6A86");
+        t.setAttribute("font-weight", neg ? "700":"400");
+        t.textContent = months[i];
+        labG.appendChild(t);
+      }
+      var firstNeg = -1;
+      for(i=0;i<cash.length;i++){ if(cash[i]<0){ firstNeg=i; break; } }
+      if(firstNeg>=0){
+        var ring = document.createElementNS(svgns,"circle");
+        ring.setAttribute("cx", sx(firstNeg).toFixed(1));
+        ring.setAttribute("cy", sy(cash[firstNeg]).toFixed(1));
+        ring.setAttribute("r","11");
+        ring.setAttribute("fill","none");
+        ring.setAttribute("stroke","#C4463A");
+        ring.setAttribute("stroke-width","2");
+        ring.setAttribute("opacity",".55");
+        dotsG.appendChild(ring);
+      }
+    }
+    function animateCashLine(){
+      var lineEl = document.getElementById("cfLine");
+      if(!lineEl) return;
+      if(reduce){ lineEl.style.transition = "none"; lineEl.style.strokeDashoffset = "0"; return; }
+      lineEl.style.transition = "none";
+      lineEl.style.strokeDashoffset = "2400";
+      void lineEl.getBoundingClientRect();
+      lineEl.style.transition = "stroke-dashoffset 1.6s cubic-bezier(.22,.61,.36,1)";
+      lineEl.style.strokeDashoffset = "0";
+    }
+
+    // ---- scene activation ----
+    function activate(n){
+      idx = n;
+      for(var i=0;i<scenes.length;i++){ scenes[i].classList.toggle("on", i===n); }
+      if(!reduce) capText.style.opacity = "0";
+      setTimeout(function(){
+        capText.textContent = caps[n];
+        capText.style.opacity = "1";
+      }, reduce?0:200);
+      for(var d=0;d<progDots.length;d++){ progDots[d].classList.toggle("act", d===n); }
+
+      if(n===0){
+        scenes[0].querySelectorAll(".num").forEach(function(el){
+          el.textContent = (parseInt(el.getAttribute("data-dec"),10)||0) > 0 ? "0.0" : "0";
+        });
+        setTimeout(function(){
+          if(idx===0) scenes[0].querySelectorAll(".num").forEach(countUp);
+        }, reduce?0:520);
+      } else if(n===1){
+        resetBars();
+        setTimeout(function(){ if(idx===1) runBars(); }, reduce?0:260);
+      } else if(n===2){
+        buildCash();
+        setTimeout(function(){ if(idx===2) animateCashLine(); }, reduce?0:280);
+      }
+    }
+
+    function loop(){
+      var next = (idx + 1) % scenes.length;
+      activate(next);
+      timer = setTimeout(loop, durations[next]);
+    }
+
+    // start (loop in both modes so all three scenes are shown;
+    //  reduced-motion swaps are instant with no sub-animations)
+    activate(0);
+    timer = setTimeout(loop, durations[0]);
+  }catch(e){
+    try{
+      var s1 = document.getElementById("sc1");
+      if(s1){ s1.classList.add("on"); }
+    }catch(_){}
+  }
+})();
+</script>
+</body>
+</html>
