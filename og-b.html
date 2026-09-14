@@ -1,0 +1,110 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box }
+  :root{
+    --bg:#101A2E;
+    --bg2:#16233B;
+    --paper:#EEF1F6;
+    --dim:#95A1B8;
+    --rule:#27334C;
+    --amber:#E0A72E;
+  }
+  html,body{ width:1200px; height:630px }
+  body{
+    background:var(--bg);
+    color:var(--paper);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    font-feature-settings:"palt" 1;
+    -webkit-font-smoothing:antialiased;
+    display:grid; grid-template-columns:1fr 452px;
+  }
+
+  .left{ padding:52px 44px 44px 72px; display:flex; flex-direction:column }
+  .right{
+    background:var(--bg2); border-left:1px solid var(--rule);
+    padding:52px 40px 44px 48px; display:flex; flex-direction:column;
+  }
+
+  header{ display:flex; align-items:baseline; gap:16px }
+  .mark{ font-size:20px; font-weight:700; letter-spacing:.34em }
+  .tag{ font-size:13px; letter-spacing:.06em; color:var(--dim) }
+
+  h1{
+    margin-top:46px;
+    font-size:46px; font-weight:700; line-height:1.42; letter-spacing:-.01em;
+  }
+  h1 em{ font-style:normal; color:var(--amber) }
+  .sub{ margin-top:22px; font-size:16px; line-height:1.85; color:var(--dim); letter-spacing:.02em }
+
+  .stats{ margin-top:auto; display:flex; gap:44px; padding-bottom:26px }
+  .stats > div{ display:flex; flex-direction:column; gap:5px }
+  .s-n{ font-size:23px; font-weight:700; letter-spacing:-.01em }
+  .s-l{ font-size:12.5px; color:var(--dim); letter-spacing:.04em }
+  .foot{ display:flex; align-items:center; gap:14px; padding-top:22px; border-top:1px solid var(--rule) }
+  .foot .t{ font-size:14px; color:var(--paper) }
+  .foot .u{ font-size:12.5px; color:#6E7B94; font-family:"SF Mono",Menlo,monospace; margin-left:auto }
+
+  .r-head{ font-size:12.5px; letter-spacing:.12em; color:var(--dim) }
+  .r-note{ margin-top:auto; font-size:13px; line-height:1.7; color:var(--dim) }
+  .r-note b{ color:var(--amber); font-weight:700 }
+  svg{ display:block; margin:38px 0 auto }
+</style>
+
+<div class="left">
+  <header>
+    <span class="mark">SAIFAR</span>
+    <span class="tag">経理代行 × AI</span>
+  </header>
+
+  <h1>黒字なのに、<br>現金が足りない。<br>その<em>3か月先</em>を先に見る。</h1>
+  <p class="sub">試算表が出てから慌てるのではなく、<br>資金が薄くなる月を、手前で把握する。</p>
+
+  <div class="stats">
+    <div><span class="s-n">3か月</span><span class="s-l">先まで見立てる</span></div>
+    <div><span class="s-n">30分</span><span class="s-l">オンライン診断</span></div>
+    <div><span class="s-n">0円</span><span class="s-l">先行モニター</span></div>
+  </div>
+
+  <div class="foot">
+    <span class="t">資金繰り見える化 診断（オンライン30分・無料）</span>
+    <span class="u">saifar-lp</span>
+  </div>
+</div>
+
+<div class="right">
+  <div class="r-head">現預金残高の見立て</div>
+
+  <svg width="332" height="330" viewBox="0 0 348 330" fill="none">
+    <line x1="0" y1="16"  x2="348" y2="16"  stroke="#27334C" stroke-width="1"/>
+    <line x1="0" y1="96"  x2="348" y2="96"  stroke="#27334C" stroke-width="1"/>
+    <line x1="0" y1="176" x2="348" y2="176" stroke="#27334C" stroke-width="1"/>
+    <line x1="0" y1="256" x2="348" y2="256" stroke="#27334C" stroke-width="1"/>
+
+    <line x1="0" y1="212" x2="348" y2="212" stroke="#E0A72E" stroke-width="1" stroke-dasharray="3 4" opacity=".5"/>
+    <text x="0" y="204" font-size="11" fill="#E0A72E" font-family="Hiragino Sans" letter-spacing=".06em" opacity=".85">固定費1か月分</text>
+
+    <path d="M16 88 L72 78 L128 104 L184 124" stroke="#EEF1F6" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M184 124 L240 226 L292 244 L336 236" stroke="#E0A72E" stroke-width="2.2" stroke-dasharray="6 5" stroke-linejoin="round" stroke-linecap="round"/>
+
+    <circle cx="16"  cy="88"  r="3" fill="#EEF1F6"/>
+    <circle cx="72"  cy="78"  r="3" fill="#EEF1F6"/>
+    <circle cx="128" cy="104" r="3" fill="#EEF1F6"/>
+    <circle cx="184" cy="124" r="4" fill="#EEF1F6"/>
+    <circle cx="240" cy="226" r="5.6" fill="#16233B" stroke="#E0A72E" stroke-width="2.6"/>
+    <circle cx="292" cy="244" r="3" fill="#E0A72E" opacity=".55"/>
+    <circle cx="336" cy="236" r="3" fill="#E0A72E" opacity=".55"/>
+
+    <line x1="184" y1="20" x2="184" y2="270" stroke="#3A4763" stroke-width="1" stroke-dasharray="2 5"/>
+
+    <text x="8"   y="290" font-size="12" fill="#95A1B8" font-family="Hiragino Sans">4月</text>
+    <text x="64"  y="290" font-size="12" fill="#95A1B8" font-family="Hiragino Sans">5月</text>
+    <text x="120" y="290" font-size="12" fill="#95A1B8" font-family="Hiragino Sans">6月</text>
+    <text x="168" y="290" font-size="12" fill="#EEF1F6" font-family="Hiragino Sans">今月</text>
+    <text x="230" y="290" font-size="12" fill="#E0A72E" font-family="Hiragino Sans">8月</text>
+    <text x="284" y="290" font-size="12" fill="#95A1B8" font-family="Hiragino Sans">9月</text>
+    <text x="318" y="290" font-size="12" fill="#95A1B8" font-family="Hiragino Sans">10月</text>
+  </svg>
+
+  <div class="r-note"><b>8月</b>に固定費1か月分を<br>下回る見込み</div>
+</div>
